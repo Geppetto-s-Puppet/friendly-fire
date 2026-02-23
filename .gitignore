@@ -1,9 +1,12 @@
 paper-*.jar
 plugins/*.jar
+plugins/.paper-remapped/
 
-cache/
-libraries/
 logs/
+cache/
 versions/
+libraries/
 
-eula.txt
+world/
+world_nether/
+world_the_end/
