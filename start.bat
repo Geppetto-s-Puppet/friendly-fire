@@ -2,7 +2,7 @@
 chcp 65001 > nul
 title Friendly Fire 1.0
 
-"C:\Program Files\Java\jdk-24\bin\java.exe" ^
+"C:\Users\unluc\AppData\Local\Programs\Eclipse Adoptium\jdk-21.0.10.7-hotspot\bin\java.exe" ^
   -Xms8G ^
   -Xmx8G ^
   -XX:+AlwaysPreTouch ^
