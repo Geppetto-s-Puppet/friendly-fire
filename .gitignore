@@ -1,1 +1,9 @@
 paper-*.jar
+plugins/*.jar
+
+cache/
+libraries/
+logs/
+versions/
+
+eula.txt

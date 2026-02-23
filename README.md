@@ -4,7 +4,6 @@
 
 | Component | Version |
 |---|---|
-<!-- | Minecraft | 1.21.x | -->
 | Paper | 1.21.8#60 |
 | Java | Temurin 21.0.10+7 LTS |
 
@@ -17,6 +16,7 @@
 
 
 
+<!-- | Minecraft | 1.21.x | -->
 
 | Skript | 2.14+ |
 | SkBee | latest (Modrinth) |
