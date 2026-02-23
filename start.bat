@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 > nul
-title Friendly Fire 1.0
+title Friendly Fire 1.1
 
 "C:\Users\unluc\AppData\Local\Programs\Eclipse Adoptium\jdk-21.0.10.7-hotspot\bin\java.exe" ^
   -Xms8G ^
