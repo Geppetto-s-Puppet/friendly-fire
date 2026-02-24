@@ -25,6 +25,6 @@ title Friendly Fire 1.1
   -XX:SurvivorRatio=32 ^
   -jar paper-1.21.8-60.jar --nogui
 
+echo Server closed
 echo.
-echo Server closed.
 pause

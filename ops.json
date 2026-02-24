@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "uuid": "c8e66929-b233-4148-aded-a247ee1a271b",
+    "name": "AviUtl2",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  }
+]

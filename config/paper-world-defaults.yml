@@ -65,9 +65,9 @@ chunks:
   max-auto-save-chunks-per-tick: 24
   prevent-moving-into-unloaded-chunks: false
 collisions:
-  allow-player-cramming-damage: false
+  allow-player-cramming-damage: true
   allow-vehicle-collisions: true
-  fix-climbing-bypassing-cramming-rule: false
+  fix-climbing-bypassing-cramming-rule: true
   max-entity-collisions: 8
   only-players-collide: false
 command-blocks:
@@ -88,7 +88,6 @@ entities:
       husk:
       - HARD
       vindicator:
-      - NORMAL
       - HARD
       zombie:
       - HARD
@@ -229,7 +228,7 @@ environment:
   disable-explosion-knockback: false
   disable-ice-and-snow: false
   disable-thunder: false
-  fire-tick-delay: 30
+  fire-tick-delay: 18
   frosted-ice:
     delay:
       max: 40
@@ -293,8 +292,8 @@ misc:
   disable-relative-projectile-velocity: false
   disable-sprint-interruption-on-attack: false
   legacy-ender-pearl-behavior: false
-  max-leash-distance: default
-  redstone-implementation: VANILLA
+  max-leash-distance: 256.0
+  redstone-implementation: ALTERNATE_CURRENT
   shield-blocking-delay: 5
   show-sign-click-command-failure-msgs-to-player: false
   update-pathfinding-on-block-update: true

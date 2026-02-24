@@ -10,7 +10,7 @@
 # Website: https://papermc.io/
 
 settings:
-  allow-end: true
+  allow-end: false
   warn-on-overload: true
   permissions-file: permissions.yml
   update-folder: update
@@ -39,5 +39,5 @@ ticks-per:
   water-underground-creature-spawns: 1
   axolotl-spawns: 1
   ambient-spawns: 1
-  autosave: 6000
+  autosave: 60000
 aliases: now-in-commands.yml
