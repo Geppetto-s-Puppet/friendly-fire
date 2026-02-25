@@ -37,13 +37,13 @@ language: english
 # If you want to translate Skript to your language please read the readme.txt located in the /lang/ folder in the jar
 # (open the jar as zip or rename it to Skript.zip to access it)
 
-check for new version: true
+check for new version: false
 # Whether Skript should check for whether a new version of Skript is available when the server starts.
 # If this is set to true Skript will announce a new version to all players with the "skript.admin" permission.
 # If set to false you can still check for a new version with '/skript update check'.
 # Please note that Skript will not detect beta releases even if you are running one as they are not necessarily stable.
 
-update check interval: 12 hours
+update check interval: 0
 # If 'check for new version' is enabled, this sets how often to check for a new update.
 # A first check will always be made when the server starts, after that checks will be made in intervals set by this option.
 # Set this to 0 to disable repeated checks, in which case only one check will be made when the server starts.
@@ -56,7 +56,7 @@ release channel: stable
 # 'prerelease' means that development releases will also be checked for.
 # Initial value of this depends on the Skript version you first installed; it was 'stable'.
 
-enable effect commands: false
+enable effect commands: true
 effect command token: !
 # If 'enable effect commands' is set to true, chat messages starting with the 'effect command token' will be interpreted as effects and executed.
 # The token can be longer than a single character, but it should not start with '/' as that starts a command.
@@ -72,11 +72,11 @@ effect command token: !
 #	!create explosion of force 10000 - likely crashes the server or at least hangs it up for a long time
 #	!ban all players - as the effect implies
 
-allow ops to use effect commands: false
+allow ops to use effect commands: true
 # Whether server operators which do not have the permission "skript.effectcommands" should have access to effect commands.
 # This setting is mainly useful for servers that do not run any permissions plugin.
 
-log effect commands: false
+log effect commands: true
 # Whether Skript should log the usage of effect commands.
 # They will be logged as [INFORMATION] in this format: '<player> issued effect command: <command>'
 
@@ -162,7 +162,7 @@ case-insensitive commands: false
 # When set to true, /test, /Test, and /TEST will all be equivalent.
 # This does not affect non-Skript commands.
 
-disable variable will not be saved warnings: false
+disable variable will not be saved warnings: true
 # Disables the "... i.e contents cannot be saved ..." warning when reloading and something in your scripts sets a variable(non local) to a value that is not serializable.
 
 disable variable missing and/or warnings: false
@@ -305,7 +305,7 @@ databases:
 	database 1:
 		# An example database to describe all possible options.
 
-		type: disabled
+		type: SQLite
 		# The type of this database. Allowed values are 'CSV', 'SQLite', 'MySQL' and 'disabled'.
 		# CSV uses a text file to store the variables, while SQLite and MySQL use databases, and 'disabled' makes Skript ignore the database as if it wasn't defined at all.
 

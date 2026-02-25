@@ -43,7 +43,7 @@ use-inventory:
   creative-mode-overrides: false
 
 logging:
-  log-commands: false
+  log-commands: true
   file: worldedit.log
   # The format of custom log message. This is java general format string (java.util.Formatter). Arguments are:
   #   1$ : date - a Date object representing event time of the log record.
@@ -65,7 +65,7 @@ snapshots:
   directory:
 
 navigation-wand:
-  item: minecraft:compass
+  item: minecraft:jigsaw
   max-distance: 100
 
 scripting:
@@ -88,7 +88,7 @@ calculation:
 debugging:
   trace-unflushed-sessions: false
 
-wand-item: minecraft:wooden_axe
+wand-item: minecraft:structure_block
 shell-save-type:
 no-double-slash: false
 no-op-permissions: false

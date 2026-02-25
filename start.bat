@@ -2,6 +2,8 @@
 chcp 65001 > nul
 title Friendly Fire 1.1
 
+upnpc-static.exe -r 25565 TCP 25565 UDP
+
 "C:\Users\unluc\AppData\Local\Programs\Eclipse Adoptium\jdk-21.0.10.7-hotspot\bin\java.exe" ^
   -Xms8G ^
   -Xmx8G ^

@@ -8,7 +8,7 @@ settings:
   # Disable this if you do not want to check for updates, or it takes too long/has issues checking
   update-checker:
     # Whether or not to check for updates
-    enabled: true
+    enabled: false
     # Whether or not the update check should be done on another thread
     async: false
 
