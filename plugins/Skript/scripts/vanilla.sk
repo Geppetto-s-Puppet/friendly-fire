@@ -1,0 +1,13 @@
+# ログ関連
+on join:
+    set join message to "&8  %player% has joined."
+    wait a tick
+    Reset(player)
+on quit:
+    set quit message to "&8  %player% has quit."
+    Reset(player)
+on chat:
+    cancel event
+    if {game} is set:
+        stop if {spec::*} contain player
+    send coloured "&8  %player%: &7%message%" to all players

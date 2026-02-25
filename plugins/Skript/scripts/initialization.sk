@@ -1,0 +1,115 @@
+# ワンショット関数
+import:
+    org.bukkit.GameRule
+command /ls:
+    trigger:
+        loop ...GameRule.values():
+            set {_key} to loop-value.getName()
+            set {_val} to (player's world).getGameRuleValue(loop-value)
+            send "set the gamerule %{_key}% of world ""world"" to %{_val}%" to server
+        # loop attribute types: send "set player's %loop-value% %player's loop-value attribute%" to server
+
+# ゲームモード初期化
+on skript start:
+# set the gamerule playersNetherPortalCreativeDelay of world "world" to 999999999
+# set the gamerule playersNetherPortalDefaultDelay of world "world" to 999999999
+# set the gamerule playersSleepingPercentage of world "world" to 999999999
+# set the gamerule commandModificationBlockLimit of world "world" to 32768
+# set the gamerule allowFireTicksAwayFromPlayer of world "world" to false
+# set the gamerule disablePlayerMovementCheck of world "world" to false
+# set the gamerule disableElytraMovementCheck of world "world" to false
+# set the gamerule projectilesCanBreakBlocks of world "world" to false
+# set the gamerule spectatorsGenerateChunks of world "world" to false
+# set the gamerule blockExplosionDropDecay of world "world" to false
+# set the gamerule enderPearlsVanishOnDeath of world "world" to true
+# set the gamerule mobExplosionDropDecay of world "world" to false
+# set the gamerule waterSourceConversion of world "world" to false
+# set the gamerule tntExplosionDropDecay of world "world" to false
+# set the gamerule maxCommandChainLength of world "world" to 65536
+# set the gamerule announceAdvancements of world "world" to false
+# set the gamerule lavaSourceConversion of world "world" to false
+# set the gamerule sendCommandFeedback of world "world" to false
+# set the gamerule naturalRegeneration of world "world" to false
+# set the gamerule maxCommandForkCount of world "world" to 65536
+# set the gamerule commandBlockOutput of world "world" to false
+# set the gamerule snowAccumulationHeight of world "world" to 1
+# set the gamerule showDeathMessages of world "world" to false
+# set the gamerule forgiveDeadPlayers of world "world" to true
+# set the gamerule doImmediateRespawn of world "world" to true
+# set the gamerule doWardenSpawning of world "world" to false
+# set the gamerule doPatrolSpawning of world "world" to false
+# set the gamerule logAdminCommands of world "world" to false
+# set the gamerule doTraderSpawning of world "world" to false
+# set the gamerule globalSoundEvents of world "world" to true
+# set the gamerule doLimitedCrafting of world "world" to true
+# set the gamerule reducedDebugInfo of world "world" to true
+# set the gamerule minecartMaxSpeed of world "world" to 1000
+# set the gamerule doWeatherCycle of world "world" to false
+# set the gamerule universalAnger of world "world" to false
+# set the gamerule doDaylightCycle of world "world" to true
+# set the gamerule doEntityDrops of world "world" to false
+# set the gamerule drowningDamage of world "world" to true
+# set the gamerule maxEntityCramming of world "world" to 0
+# set the gamerule doVinesSpread of world "world" to true
+    set the gamerule doMobSpawning of world "world" to true
+    set the gamerule keepInventory of world "world" to true
+    set the gamerule spawnChunkRadius of world "world" to 0
+    set the gamerule disableRaids of world "world" to true
+    set the gamerule freezeDamage of world "world" to true
+    set the gamerule randomTickSpeed of world "world" to 0
+    set the gamerule doInsomnia of world "world" to false
+    set the gamerule locatorBar of world "world" to false
+    set the gamerule tntExplodes of world "world" to true
+    set the gamerule mobGriefing of world "world" to true
+    set the gamerule doTileDrops of world "world" to true
+    set the gamerule doMobLoot of world "world" to false
+    set the gamerule fallDamage of world "world" to true
+    set the gamerule doFireTick of world "world" to true
+    set the gamerule fireDamage of world "world" to true
+    set the gamerule spawnRadius of world "world" to 0
+
+
+
+
+set the gamerule tntExplosionDropDecay of world "world" to false
+set the gamerule globalSoundEvents of world "world" to true
+set the gamerule enderPearlsVanishOnDeath of world "world" to true
+set the gamerule maxCommandChainLength of world "world" to 65536
+set the gamerule doVinesSpread of world "world" to true
+set the gamerule disableElytraMovementCheck of world "world" to false
+set the gamerule lavaSourceConversion of world "world" to false
+set the gamerule commandBlockOutput of world "world" to true
+set the gamerule forgiveDeadPlayers of world "world" to true
+set the gamerule playersNetherPortalCreativeDelay of world "world" to 0
+set the gamerule maxEntityCramming of world "world" to 24
+set the gamerule allowFireTicksAwayFromPlayer of world "world" to false
+set the gamerule universalAnger of world "world" to false
+set the gamerule playersSleepingPercentage of world "world" to 100
+set the gamerule snowAccumulationHeight of world "world" to 1
+set the gamerule doImmediateRespawn of world "world" to false
+set the gamerule blockExplosionDropDecay of world "world" to true
+set the gamerule naturalRegeneration of world "world" to true
+set the gamerule doEntityDrops of world "world" to true
+set the gamerule playersNetherPortalDefaultDelay of world "world" to 80
+set the gamerule sendCommandFeedback of world "world" to true
+set the gamerule doWardenSpawning of world "world" to true
+set the gamerule reducedDebugInfo of world "world" to false
+set the gamerule waterSourceConversion of world "world" to true
+set the gamerule projectilesCanBreakBlocks of world "world" to true
+set the gamerule announceAdvancements of world "world" to true
+set the gamerule drowningDamage of world "world" to true
+set the gamerule doWeatherCycle of world "world" to true
+set the gamerule mobExplosionDropDecay of world "world" to true
+set the gamerule doDaylightCycle of world "world" to true
+set the gamerule showDeathMessages of world "world" to true
+set the gamerule disablePlayerMovementCheck of world "world" to false
+set the gamerule doLimitedCrafting of world "world" to false
+set the gamerule doTraderSpawning of world "world" to true
+set the gamerule commandModificationBlockLimit of world "world" to 32768
+set the gamerule logAdminCommands of world "world" to true
+set the gamerule minecartMaxSpeed of world "world" to 8
+set the gamerule spectatorsGenerateChunks of world "world" to true
+set the gamerule doPatrolSpawning of world "world" to true
+set the gamerule maxCommandForkCount of world "world" to 65536
+>
+
