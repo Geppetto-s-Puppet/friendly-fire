@@ -68,9 +68,10 @@ on command:
 # ライブラリ関数
 function Loc(e0:location,dy:number=0) :: string:
     return "%x of {_e0}% %{_dy} + y of {_e0}% %z of {_e0}%"
-
-
-
+function Has(es:objects,e0:object) :: boolean:
+    loop {_es::*}:
+        return true if loop-value is {_e0}
+    return false
 
 
 
@@ -453,8 +454,6 @@ function Loc(e0:location,dy:number=0) :: string:
 
     
 
-
-#     #
 
 #     # add "不死|所持　>>死亡するとその地点で復活する|所持　>>仮死状態でアイテムを保持する" to {_s::*}
 #     # add "小人|右クリ>>身体が縮小したり戻ったりする|所持　>>体力と最大体力の比率はおなじ" to {_s::*}

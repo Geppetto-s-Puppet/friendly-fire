@@ -1,22 +1,3 @@
-# マップセレクト
-function ShuffledMap(debug:boolean=false):
-    set {_check} to true
-    set {_check} to false if {selected_map::*} is set
-    set {_check} to true if {_debug} is true
-    {_check} is true:
-        if size of {map::*} = 0:
-            add "01|Garry's Mod|空島" to {map::*}
-            add "02|Minecraft|ヴィラ" to {map::*}
-            add "03|CoD: Black Ops|ニュークタウン" to {map::*}
-            add "04|Rainbow Six Siege|オレゴン" to {map::*}
-        set {_map} to random element out of {map::*}
-        set {selected_map::*} to {_map} split at "|"
-        remove {_map} from {map::*}
-    {_debug} is true:
-        send "&8&o - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to ops
-        send "&8&o  next: &7%{selected_map::3}%" to ops
-        send "&8&o - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to ops
-
 # ゲーム処理
 command /s <number=0> <string="DM">:
     trigger:
@@ -69,8 +50,7 @@ command /s <number=0> <string="DM">:
             play sound "MUSIC_CREATIVE" with seed 20 with volume 0.3 with pitch 2 for players
             clear {♠::*}, {♥::*}, {♦::*}, {♣::*}, {🃏::*}
             # マップのお片付け
-            # set {_map} to a new cuboid region from location(-200,-64,-200,"world") to location(200,319,200,"world")
-            # use we to set blocks in {_map} to "air"
+            ClearMap()
         else if arg-1 is 1: 
             {game} isn't set
             set {game} to arg-2
@@ -82,11 +62,8 @@ command /s <number=0> <string="DM">:
             execute console command "/team modify player nametagVisibility never"
             execute console command "/team modify player seeFriendlyInvisibles false"
             execute console command "/bossbar add timer ""------------------------"""
-            ShuffledMap()
-#             paste schematic named "%{selected_map::1}%" at location(0,100,0):
-#                 paste entities: true
-#                 paste biomes: true
-#                 ignore air: true
+            ShuffleMap()
+            LoadMap()
             add all items to {_items::*}
             # set {_test} to true if size of players is 1
             send coloured "<#cd853f> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to players
@@ -164,8 +141,8 @@ command /s <number=0> <string="DM">:
                 execute console command "/effect give @a blindness 5 255 true"
                 execute console command "/effect give @a slowness 1 255 true"
                 execute console command "/spreadplayers 0 0 10 200 false @a"
-#                 execute console command "/playsound minecraft:event.mob_effect.raid_omen master @a ~ ~ ~ 0.2 0 0.2"
-#                 execute console command "/playsound minecraft:event.mob_effect.trial_omen master @a ~ ~ ~ 0.6 0 0.6"
+                execute console command "/playsound minecraft:event.mob_effect.trial_omen master @a ~ ~ ~ 0.6 0 0.6"
+                execute console command "/playsound minecraft:event.mob_effect.raid_omen master @a ~ ~ ~ 0.2 0 0.2"
                 execute console command "/bossbar set timer name ""&f&l%{selected_map::3}% &8&m &8&o Deathmatch"""
                 execute console command "/bossbar set timer style notched_20"
                 loop 12001 times:
@@ -174,29 +151,23 @@ command /s <number=0> <string="DM">:
                     execute console command "/bossbar set timer players @a" if loop-counter is 50
                     execute console command "/bossbar set timer value %100 - (loop-counter - 1)/120%" if mod(loop-counter, 12) is 1
                     if mod(loop-counter,200) is 1:
-                        loop-counter > 66#6
-                        # {_test} isn't true
-                        # loop players where [{play::*} contain input]:
-                        #     add 1 to {_♠} if {♠::*} contain loop-player
-                        #     add 1 to {_♥} if {♥::*} contain loop-player
-                        #     add 1 to {_♦} if {♦::*} contain loop-player
-                        #     add 1 to {_♣} if {♣::*} contain loop-player
-                        #     add 1 to {_🃏} if {🃏::*} contain loop-player
+                        loop-counter > 666
+                        {_test} isn't true
                         set {_♠} to 0
                         set {_♥} to 0
                         set {_♦} to 0
                         set {_♣} to 0
                         set {_🃏} to 0
-                        loop players where [{play::*} contain input]:
-                            if {♠::*} contain loop-player:
+                        loop {play::*}: # loop players where [{play::*} contain input]:
+                            if Has({♠::*},loop-value-2) is true:
                                 set {_♠} to 1
-                            else if {♥::*} contain loop-player:
+                            else if Has({♥::*},loop-value-2) is true:
                                 set {_♥} to 1
-                            else if {♦::*} contain loop-player:
+                            else if Has({♦::*},loop-value-2) is true:
                                 set {_♦} to 1
-                            else if {♣::*} contain loop-player:
+                            else if Has({♣::*},loop-value-2) is true:
                                 set {_♣} to 1
-                            else if {🃏::*} contain loop-player:
+                            else if Has({🃏::*},loop-value-2) is true:
                                 set {_🃏} to 1
                         if {_♠} + {_♥} + {_♦} + {_♣} = 0:
                             set {winner} to "🃏"

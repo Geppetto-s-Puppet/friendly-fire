@@ -1,0 +1,85 @@
+# マップのシャッフルセレクト実行
+function ShuffleMap(debug:boolean=false):
+    set {_check} to true
+    set {_check} to false if {selected_map::*} is set
+    set {_check} to true if {_debug} is true
+    {_check} is true:
+        if size of {map::*} = 0:
+            add "01|Garry's Mod|空島" to {map::*}
+            add "02|Minecraft|ヴィラ" to {map::*}
+            add "03|CoD: Black Ops|ニュークタウン" to {map::*}
+            add "04|Rainbow Six Siege|オレゴン" to {map::*}
+        set {_map} to random element out of {map::*}
+        set {selected_map::*} to {_map} split at "|"
+        remove {_map} from {map::*}
+    {_debug} is true:
+        send "&8&o - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to ops
+        send "&8&o  next: &7%{selected_map::3}%" to ops
+        send "&8&o - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to ops
+
+# SkWEからskript-reflectへの移行
+import:
+    java.io.File
+    java.io.FileInputStream
+    com.sk89q.worldedit.WorldEdit
+    com.sk89q.worldedit.math.BlockVector3
+    com.sk89q.worldedit.regions.CuboidRegion
+    com.sk89q.worldedit.bukkit.BukkitAdapter
+    com.sk89q.worldedit.world.block.BlockTypes
+    com.sk89q.worldedit.session.ClipboardHolder
+    com.sk89q.worldedit.function.operation.Operations
+    com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats
+function ClearMap():
+    set {_max} to BlockVector3.at(300, 319, 300)
+    set {_min} to BlockVector3.at(-300, -64, -300)
+    set {_weWorld} to BukkitAdapter.adapt(world("world"))
+    set {_region} to new CuboidRegion({_weWorld}, {_min}, {_max})
+    set {_air} to BlockTypes.AIR.getDefaultState()
+    create section stored in {_task}:
+        set {_builder} to WorldEdit.getInstance().newEditSessionBuilder()
+        set {_builder} to {_builder}.world({_weWorld})
+        set {_builder} to {_builder}.limitUnlimited()
+        set {_builder} to {_builder}.fastMode(true)
+        set {_builder} to {_builder}.changeSetNull()
+        set {_builder} to {_builder}.checkMemory(false)
+        set {_session} to {_builder}.build()
+        {_session}.setBlocks({_region}, {_air})
+        {_session}.close()
+    run section {_task} async
+function LoadMap():
+    wait a tick
+    # schematicをパス指定
+    set {_file} to new File("plugins/FastAsyncWorldEdit/schematics/%{selected_map::1}%.schem")
+    set {_format} to ClipboardFormats.findByFile({_file})
+    set {_fis} to new FileInputStream({_file})
+    set {_reader} to {_format}.getReader({_fis})
+    set {_clipboard} to {_reader}.read()
+    {_reader}.close()
+    {_fis}.close()
+    # 中心を合わせておく
+    set {_cbRegion} to {_clipboard}.getRegion()
+    set {_center} to {_cbRegion}.getCenter().toBlockPoint()
+    set {_origin} to {_clipboard}.getOrigin()
+    set {_centerOffset} to {_center}.subtract({_origin})
+    set {_targetVec} to BlockVector3.at(0, 100, 0)
+    set {_to} to {_targetVec}.subtract({_centerOffset})
+    set {_weWorld} to BukkitAdapter.adapt(world("world"))
+    # 非同期ペースト
+    create section stored in {_task}:
+        set {_builder} to WorldEdit.getInstance().newEditSessionBuilder()
+        set {_builder} to {_builder}.world({_weWorld})
+        set {_builder} to {_builder}.limitUnlimited()
+        set {_builder} to {_builder}.fastMode(true)
+        set {_builder} to {_builder}.changeSetNull()
+        set {_builder} to {_builder}.checkMemory(false)
+        set {_session} to {_builder}.build()
+        set {_holder} to new ClipboardHolder({_clipboard})
+        set {_pb} to {_holder}.createPaste({_session})
+        set {_pb} to {_pb}.to({_to})
+        set {_pb} to {_pb}.ignoreAirBlocks(true)
+        set {_pb} to {_pb}.copyEntities(true)
+        set {_pb} to {_pb}.copyBiomes(true)
+        set {_op} to {_pb}.build()
+        Operations.complete({_op})
+        {_session}.close()
+    run section {_task} async
