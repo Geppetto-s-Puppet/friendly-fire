@@ -11,3 +11,25 @@ on chat:
     if {game} is set:
         stop if {spec::*} contain player
     send coloured "&8  %player%: &7%message%" to all players
+
+
+# プレイヤー制限
+on teleport:
+    {play::*} contain player
+    cancel event if teleport cause is spectate
+on pickup:
+    cancel event if item's name starts with "&0"
+on inventory click:
+    cancel event if item's name starts with "&0"
+
+# 投擲関連
+on projectile hit:
+    event.getHitEntity().setNoDamageTicks(0)
+    spawn 1 of primed tnt at projectile if projectile is egg
+    make shooter damage victim by 1 if projectile is snowball
+
+# 自然生成
+on spawn:
+    spawn reason is natural
+    cancel event
+    spawn (cat or fox or wolf or parrot) if chance of 1%

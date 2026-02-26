@@ -1,0 +1,72 @@
+function Reset(p:player,gm:string="spec"):
+    # メインデータ処理
+    remove {_p} from {play::*}
+    remove {_p} from {spec::*}
+    extinguish {_p}
+    close inventory of {_p}
+    set arrow stuck in {_p} to 0
+    reveal {_p} from all players
+    send action bar "         " to {_p}
+    send title "" with subtitle "" to {_p}
+    execute server command "/team leave %{_p}%"
+    execute console command "/effect clear %{_p}%"
+    set {_p}'s cooldown for enchanted_book to 0 ticks
+    set {_p}'s generic safe fall distance attribute to 10
+    set {_p}'s generic fall damage multiplier attribute to 0.3
+    set tablist name of {_p} to "&7%name of {_p}% &8%hours of time played of {_p}%時間"
+    # サブデータ処理
+    set {_p}'s generic max health attribute to 20
+#     set {_p}'s player block interaction range attribute to 4.5
+#     set {_p}'s player entity interaction range attribute to 3
+#     set {_p}'s generic scale attribute to 1
+#     # set {_p}'s generic gravity attribute to 0.08
+#     # set {_p}'s generic luck attribute to 0
+#     # set {_p}'s generic armor attribute to 0
+#     # set {_p}'s camera distance attribute to 4
+#     # set {_p}'s generic oxygen bonus attribute to 0
+#     # set {_p}'s generic burning time attribute to 1
+#     # set {_p}'s generic attack speed attribute to 4
+#     # set {_p}'s generic step height attribute to 0.6
+#     # set {_p}'s generic attack damage attribute to 2
+#     # set {_p}'s generic max absorption attribute to 0
+#     # set {_p}'s waypoint receive range attribute to 0
+#     # set {_p}'s waypoint transmit range attribute to 0
+#     # set {_p}'s generic armor toughness attribute to 0
+#     # set {_p}'s player sneaking speed attribute to 0.3
+#     # set {_p}'s generic movement speed attribute to 0.7
+#     # set {_p}'s player mining efficiency attribute to 0
+#     # set {_p}'s generic attack knockback attribute to 0
+#     # set {_p}'s player block break speed attribute to 1
+#     # set {_p}'s generic jump strength attribute to 0.42
+#     # set {_p}'s generic movement efficiency attribute to 0
+#     # set {_p}'s generic knockback resistance attribute to 0
+#     # set {_p}'s player sweeping damage ratio attribute to 0
+#     # set {_p}'s player submerged mining speed attribute to 0.2
+#     # set {_p}'s generic water movement efficiency attribute to 0
+#     # set {_p}'s generic explosion knockback resistance attribute to 0
+    set {_p}'s health to max health of {_p} 
+    set {_p}'s freeze time to 0 tick
+    set {_p}'s saturation to 99999
+    set {_p}'s fall distance to 0
+    set {_p}'s walk speed to 0.2
+    set {_p}'s fly speed to 0.09
+    set {_p}'s food level to 10
+    # インベントリ処理
+    loop 9 times: 
+        set slot (loop-number + 8) of {_p}'s inventory to iron bars named "&0" without entire tooltip
+        set slot (loop-number +17) of {_p}'s inventory to iron bars named "&0" without entire tooltip
+        set slot (loop-number +26) of {_p}'s inventory to iron bars named "&0" without entire tooltip
+    # 生存者か観戦者か
+    if {_gm} is "play":
+        add {_p} to {play::*}
+        set saturation of {_p} to 5
+        set {_p}'s tab list header to "                                                                                                                                                    %newline% %newline% %newline%⣿⣿⣿⠟⠛⠛⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⢋⣩⣉⢻⣿⡇%newline%⣿⣿⣿⠀⣿⣶⣕⣈⠹⠿⠿⠿⠿⠟⠛⣛⢋⣰⠣⣿⣿⠀⣿⣿%newline%⣿⣿⣿⡀⣿⣿⣿⣧⢻⣿⣶⣷⣿⣿⣿⣿⣿⣿⠿⠶⡝⠀⣿⣿%newline%⣿⣿⣿⣷⠘⣿⣿⣿⢏⣿⣿⣋⣀⣈⣻⣿⣿⣷⣤⣤⣿⡐⢿⣿%newline%⣿⣿⣿⣿⣆⢩⣝⣫⣾⣿⣿⣿⣿⡟⠿⠿⠦⠀⠸⠿⣻⣿⡄⢻%newline%⣿⣿⣿⣿⣿⡄⢻⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣾⣿⣿⣿⣿⠇⣼%newline%⣿⣿⣿⣿⣿⣿⡄⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⣰⣿%newline%⣿⣿⣿⣿⣿⣿⠇⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢀⣿⣿%newline%⣿⣿⣿⣿⣿⠏⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢸⣿⣿%newline%⣿⣿⣿⣿⠟⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⣿⣿%newline%⣿⣿⣿⠋⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⣿⣿%newline%⣿⣿⠋⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿%newline%⣿⠏⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡯⢸⣿%newline%&7[1.21.8] &fフレンドリー・ファイア&4∅%newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline% %newline%"
+        set gamemode of {_p} to survival
+        execute console command "/team join player %{_p}%"
+    else:
+        add {_p} to {spec::*}
+        set {_p}'s tab list header to ""
+        set gamemode of {_p} to spectator
+        apply infinite invisibility 255 to {_p}:
+            hide particles
+            hide icon
