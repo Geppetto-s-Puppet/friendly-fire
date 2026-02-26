@@ -168,7 +168,7 @@ disable variable will not be saved warnings: true
 disable variable missing and/or warnings: false
 # Disables the "List is missing 'and' or 'or', defaulting to 'and'" warning when reloading your script.
 
-disable starting a variable's name with an expression warnings: false
+disable starting a variable's name with an expression warnings: true
 # Disables the "Starting a variable's name with an expression is discouraged..." warnings
 
 disable single colon in variable name warnings: false

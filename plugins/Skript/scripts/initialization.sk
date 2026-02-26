@@ -7,7 +7,8 @@ command /ls:
             set {_key} to loop-value.getName()
             set {_val} to (player's world).getGameRuleValue(loop-value)
             send "set the gamerule %{_key}% of world ""world"" to %{_val}%" to server
-        # loop attribute types: send "set player's %loop-value% %player's loop-value attribute%" to server
+        # loop attribute types:
+        #     send "set player's %loop-value% to %player's loop-value attribute%" to server
 
 # ゲームモード初期化
 on skript start:

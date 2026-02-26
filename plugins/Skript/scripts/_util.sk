@@ -80,18 +80,7 @@ function Loc(e0:location,dy:number=0) :: string:
 
 
 
-# function Resets():
-#     clear {game_suddendeath}
-#     for each {_i} in {skill::*}:
-#         set {_i::*} to (uncolored {_i}'s name) parsed as "%string%のシンボル"
-#         clear {%{_i::1}%::*}
-#         clear {%{_i::1}%}
-#     loop entities:
-#         clear loop-entity's inventory if loop-entity is a player
-#         delete loop-entity if loop-entity isn't a player
-#     set server frozen state to false
-#     set weather in "world" to clear
-#     stop all sounds for all players
+
 # function Ready(p:player,s:timespan,t:string="OFF") :: boolean:
 #     if {_t} is "RESET":
 #         set the cooldown of enchanted book for {_p} to {_s}
@@ -116,6 +105,11 @@ function Loc(e0:location,dy:number=0) :: string:
 #         loop items in {_e}'s inventory:
 #             return true if {_s} is string tag "skill" of custom nbt of loop-item
 #     return false
+
+
+
+
+
 
 
 
@@ -278,208 +272,6 @@ function Loc(e0:location,dy:number=0) :: string:
 #         give item to player if item isn't structure void
 
 # #ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
-
-# # マップセレクト
-# function ShuffledMap(debug:boolean=false):
-#     set {_check} to true
-#     set {_check} to false if {selected_map::*} is set
-#     set {_check} to true if {_debug} is true
-#     {_check} is true:
-#         if size of {map::*} = 0:
-#             add "01|Garry's Mod|空島" to {map::*}
-#             add "02|Minecraft|ヴィラ" to {map::*}
-#             add "03|CoD: Black Ops|ニュークタウン" to {map::*}
-#             add "04|Rainbow Six Siege|オレゴン" to {map::*}
-#         set {_map} to random element out of {map::*}
-#         set {selected_map::*} to {_map} split at "|"
-#         remove {_map} from {map::*}
-#     {_debug} is true:
-#         send "&8&o - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to ops
-#         send "&8&o  next: &7%{selected_map::3}%" to ops
-#         send "&8&o - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to ops
-
-# # ゲーム処理
-# command /s <number=0> <string="DM">:
-#     trigger:
-#         wait a tick
-#         Resets()
-#         if arg-1 is -1:
-#             {game} is set
-#             clear {game}
-#             clear {selected_map::*}
-#             execute console command "/team remove player"
-#             execute console command "/bossbar remove timer"
-#             execute console command "/worldborder set 300 0"
-#             execute console command "/worldborder warning distance 0"
-#             set {winner} to "&8&lなし" if {winner} is "n"
-#             set {winner} to "&4&lハート♥" if {winner} is "♥"
-#             set {winner} to "&4&lダイヤ♦" if {winner} is "♦"
-#             set {winner} to "&f&lクラブ♣" if {winner} is "♣"
-#             set {winner} to "&f&lスペード♠" if {winner} is "♠"
-#             set {winner} to "&8&lジョーカー🃏" if {winner} is "🃏"
-#             send coloured "<#cd853f> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to all players
-#             send coloured "<#cd853f>" to all players
-#             send coloured "<#cd853f>  &7&l勝利チーム： &f&l%{winner}%" to all players
-#             send coloured "<#cd853f>" to all players
-#             send coloured "<#cd853f>" to all players
-#             loop {♠::*}:
-#                 send coloured "<#cd853f>  &fスペード♠： %loop-value% &8(%{skill_%loop-value's name%}%)" to all players if {winner} is "&fスペード♠"
-#                 send coloured "<#cd853f>  &7スペード♠： %loop-value% &8(%{skill_%loop-value's name%}%)" to all players if {winner} isn't "&fスペード♠"
-#             loop {♥::*}:
-#                 send coloured "<#cd853f>  &fハート♥： %loop-value% &8(%{skill_%loop-value's name%}%)" to all players if {winner} is "&4ハート♥"
-#                 send coloured "<#cd853f>  &7ハート♥： %loop-value% &8(%{skill_%loop-value's name%}%)" to all players if {winner} isn't "&4ハート♥"
-#             loop {♦::*}:
-#                 send coloured "<#cd853f>  &fダイヤ♦： %loop-value% &8(%{skill_%loop-value's name%}%)" to all players if {winner} is "&4ダイヤ♦"
-#                 send coloured "<#cd853f>  &7ダイヤ♦： %loop-value% &8(%{skill_%loop-value's name%}%)" to all players if {winner} isn't "&4ダイヤ♦"
-#             loop {♣::*}:
-#                 send coloured "<#cd853f>  &fクラブ♣： %loop-value% &8(%{skill_%loop-value's name%}%)" to all players if {winner} is "&fクラブ♣"
-#                 send coloured "<#cd853f>  &7クラブ♣： %loop-value% &8(%{skill_%loop-value's name%}%)" to all players if {winner} isn't "&fクラブ♣"
-#             loop {🃏::*}:
-#                 send coloured "<#cd853f>  &fジョーカー🃏： %loop-value% &8(%{skill_%loop-value's name%}%)" to all players if {winner} is "&8ジョーカー🃏"
-#                 send coloured "<#cd853f>  &7ジョーカー🃏： %loop-value% &8(%{skill_%loop-value's name%}%)" to all players if {winner} isn't "&8ジョーカー🃏"
-#             send coloured "<#cd853f>" to all players
-#             send coloured "<#cd853f> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to all players
-#             loop players:
-#                 Reset(loop-player)
-#                 teleport loop-player at location(0,100,0,"world")
-#             execute console command "/effect give @a minecraft:blindness 1 255 true"
-#             send title {winner} with subtitle "&7チームが勝利しました" to all players for 4 second
-#             play sound "MUSIC_CREATIVE" with seed 20 with volume 0.3 with pitch 2 for all players
-#             set {_map} to a new cuboid region from location(-200,-64,-200,"world") to location(200,319,200,"world")
-#             clear {♠::*}, {♥::*}, {♦::*}, {♣::*}, {🃏::*}
-#             use we to set blocks in {_map} to "air"
-#         else if arg-1 is 1: 
-#             {game} isn't set
-#             set {game} to arg-2
-#             set {winner} to "n"
-#             execute console command "/team add player"
-#             execute console command "/worldborder warning distance 1000"
-#             execute console command "/team modify player color dark_red"
-#             execute console command "/team modify player collisionRule always"
-#             execute console command "/team modify player nametagVisibility never"
-#             execute console command "/team modify player seeFriendlyInvisibles false"
-#             ShuffledMap()
-#             execute console command "/bossbar add timer ""------------------------"""
-#             paste schematic named "%{selected_map::1}%" at location(0,100,0):
-#                 paste entities: true
-#                 paste biomes: true
-#                 ignore air: true
-#             set {_test} to true if size of all players is 1
-#             send coloured "<#cd853f> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to all players
-#             send coloured "<#cd853f>" to all players
-#             send coloured "<#cd853f>  &7マップ： &f%{selected_map::3}% &8(%{selected_map::2}%)" to all players
-#             send coloured "<#cd853f>" to all players
-#             loop players:
-#                 send coloured "<#cd853f>  &7参加者%loop-counter%： &f%loop-value%" to all players
-#             send coloured "<#cd853f>" to all players
-#             if arg-2 is "DM": #Deathmatch
-#                 loop 9 times:
-#                     add paper named "&7トランプの&f♠%loop-number +1%" to {_cards::*}
-#                     add paper named "&7トランプの&4♥%loop-number +1%" to {_cards::*}
-#                     add paper named "&7トランプの&4♦%loop-number +1%" to {_cards::*}
-#                     add paper named "&7トランプの&f♣%loop-number +1%" to {_cards::*}
-#                 add paper named "&7トランプの&8🃏" to {_cards::*}
-#                 add paper named "&7トランプの&f♠J" to {_cards::*}
-#                 add paper named "&7トランプの&4♥J" to {_cards::*}
-#                 add paper named "&7トランプの&4♦J" to {_cards::*}
-#                 add paper named "&7トランプの&f♣J" to {_cards::*}
-#                 add paper named "&7トランプの&f♠Q" to {_cards::*}
-#                 add paper named "&7トランプの&4♥Q" to {_cards::*}
-#                 add paper named "&7トランプの&4♦Q" to {_cards::*}
-#                 add paper named "&7トランプの&f♣Q" to {_cards::*}
-#                 add paper named "&7トランプの&f♠K" to {_cards::*}
-#                 add paper named "&7トランプの&4♥K" to {_cards::*}
-#                 add paper named "&7トランプの&4♦K" to {_cards::*}
-#                 add paper named "&7トランプの&f♣K" to {_cards::*}
-#                 add paper named "&7トランプの&f♠A" to {_cards::*}
-#                 add paper named "&7トランプの&4♥A" to {_cards::*}
-#                 add paper named "&7トランプの&4♦A" to {_cards::*}
-#                 add paper named "&7トランプの&f♣A" to {_cards::*}
-#                 add {skill::*} to {_skill::*}
-#                 loop players:
-#                     Reset(loop-player,"play")
-#                     set {_card} to random element out of {_cards::*}
-#                     set {_skill} to random element out of {_skill::*}
-#                     send subtitle "&8&o違うマークの陣営を全滅させましょう" to loop-player for 4 second
-#                     set slot 0 of loop-player's inventory to ({_skill})
-#                     set slot 1 of loop-player's inventory to (1 of bow or crossbow)
-#                     set slot 2 of loop-player's inventory to (random integer between 20 and 30 of (random element out of {food::*}))
-#                     set slot 3 of loop-player's inventory to (1 of potion of strong instant health)
-#                     set slot 4 of loop-player's inventory to (1 of potion of strong instant health)
-#                     set slot 5 of loop-player's inventory to (random integer between 1 and 10 of (random element out of all items))
-#                     set slot 6 of loop-player's inventory to (random integer between 1 and 10 of (random element out of all items))
-#                     set slot 7 of loop-player's inventory to (random integer between 20 and 30 of arrow)
-#                     set slot 8 of loop-player's inventory to {_card}
-#                     add loop-player to {♠::*} if {_card}'s name contains "♠"
-#                     add loop-player to {♥::*} if {_card}'s name contains "♥"
-#                     add loop-player to {♦::*} if {_card}'s name contains "♦"
-#                     add loop-player to {♣::*} if {_card}'s name contains "♣"
-#                     add loop-player to {🃏::*} if {_card}'s name contains "🃏"
-#                     execute console command "/team join player %loop-player%"
-#                     set {skill_%loop-player's name%} to uncolored name of {_skill}
-#                     subtract {_card} from {_cards::*}
-#                 send coloured "<#cd853f>" to all players
-#                 loop {🃏::*}:
-#                     send title "&7&lあなたは&8&lジョーカー🃏&7&lです" to loop-value
-#                     send coloured "<#cd853f>  &7&lあなたは&8&lジョーカー🃏&7&l陣営です" to loop-value
-#                 loop {♠::*}:
-#                     send title "&7&lあなたは&f&lスペード♠&7&lです" to loop-value
-#                     send coloured "<#cd853f>  &7&lあなたは&f&lスペード♠&7&l陣営です" to loop-value
-#                 loop {♥::*}:
-#                     send title "&7&lあなたは&4&lハート♥&7&lです" to loop-value
-#                     send coloured "<#cd853f>  &7&lあなたは&4&lハート♥&7&l陣営です" to loop-value
-#                 loop {♦::*}:
-#                     send title "&7&lあなたは&4&lダイヤ♦&7&lです" to loop-value
-#                     send coloured "<#cd853f>  &7&lあなたは&4&lダイヤ♦&7&l陣営です" to loop-value
-#                 loop {♣::*}:
-#                     send title "&7&lあなたは&f&lクラブ♣&7&lです" to loop-value
-#                     send coloured "<#cd853f>  &7&lあなたは&f&lクラブ♣&7&l陣営です" to loop-value
-#                 send coloured "<#cd853f>" to all players
-#                 send coloured "<#cd853f> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to all players
-#                 execute console command "/spreadplayers 0 0 10 200 false @a"
-#                 execute console command "/effect give @a slowness 1 255 true"
-#                 execute console command "/effect give @a blindness 5 255 true"
-#                 execute console command "/effect give @a minecraft:darkness 5 255 true"
-#                 execute console command "/playsound minecraft:event.mob_effect.raid_omen master @a ~ ~ ~ 0.2 0 0.2"
-#                 execute console command "/playsound minecraft:event.mob_effect.trial_omen master @a ~ ~ ~ 0.6 0 0.6"
-#                 execute console command "/bossbar set timer name ""&f&l%{selected_map::3}% &8&m &8&o Deathmatch"""
-#                 execute console command "/bossbar set timer style notched_20"
-#                 loop 12001 times:
-#                     wait 1 tick
-#                     stop if {game} isn't set
-#                     execute console command "/bossbar set timer players @a" if loop-counter is 50
-#                     execute console command "/bossbar set timer value %100 - (loop-counter - 1)/120%" if mod(loop-counter, 12) is 1
-#                     if mod(loop-counter,200) is 1:
-#                         loop-counter > 600
-#                         {_test} isn't true
-#                         set {_♠} to 0
-#                         set {_♥} to 0
-#                         set {_♦} to 0
-#                         set {_♣} to 0
-#                         set {_🃏} to 0
-#                         loop players where [{play::*} contain input]:
-#                             add 1 to {_♠} if {♠::*} contain loop-player
-#                             add 1 to {_♥} if {♥::*} contain loop-player
-#                             add 1 to {_♦} if {♦::*} contain loop-player
-#                             add 1 to {_♣} if {♣::*} contain loop-player
-#                             add 1 to {_🃏} if {🃏::*} contain loop-player
-#                         if {_♠} + {_♥} + {_♦} + {_♣} = 0:
-#                             set {winner} to "🃏"
-#                         else if {_♥} + {_♦} + {_♣} + {_🃏} = 0:
-#                             set {winner} to "♠"
-#                         else if {_♠} + {_♦} + {_♣} + {_🃏} = 0:
-#                             set {winner} to "♥"
-#                         else if {_♠} + {_♥} + {_♣} + {_🃏} = 0:
-#                             set {winner} to "♦"
-#                         else if {_♠} + {_♥} + {_♦} + {_🃏} = 0:
-#                             set {winner} to "♣"
-#                         execute console command "/s -1 %arg-2%" if {winner} isn't "n"
-#                 execute console command "/s -1 %arg-2%" if {_test} isn't true
-#         else:
-#             if {game} isn't set:
-#                 execute player command "/s 1 %arg-2%"
-#             else:
-#                 execute player command "/s -1 %arg-2%"
 
 # #ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 
