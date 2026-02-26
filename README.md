@@ -39,98 +39,95 @@
 | skript-packet | latest |
 | PlaceholderAPI | 2.11.7 | -->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- # SkWEからskript-reflectへの移行
+### Migration
+Replaced the built-in Skript-WorldEdit integration with direct Java API calls instead of:
+```java
+function ClearMap():
+    set {_map} to a new cuboid region from location(-200,-64,-200,"world") to location(200,319,200,"world")
+    use we to set blocks in {_map} to "air"
+function LoadMap():
+    wait a tick
+    paste schematic named "%{selected_map::1}%" at location(0,100,0):
+        paste entities: true
+        paste biomes: true
+        ignore air: true
+```
+With the new implementation using the FAWE API directly:
+```java
 import:
+    java.io.File
+    java.io.FileInputStream
     com.sk89q.worldedit.WorldEdit
     com.sk89q.worldedit.math.BlockVector3
     com.sk89q.worldedit.regions.CuboidRegion
+    com.sk89q.worldedit.bukkit.BukkitAdapter
     com.sk89q.worldedit.world.block.BlockTypes
-    com.fastasyncworldedit.core.FaweAPI
-    com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats
-    com.sk89q.worldedit.function.operation.Operations
     com.sk89q.worldedit.session.ClipboardHolder
-    java.io.File
-    java.io.FileInputStream
-# ========================================
-# TestA: 指定範囲を air で塗りつぶす
-# function TestA():
-    # wait 5 tick
-#     set {_map} to a new cuboid region from location(-200,-64,-200,"world") to location(200,319,200,"world")
-#     use we to set blocks in {_map} to "air"
-# ========================================
-function TestA():
-    wait 5 tick
-
-    # ワールドの取得
-    set {_faweWorld} to FaweAPI.getWorld("world")
-
-    # CuboidRegion の作成
-    set {_min} to BlockVector3.at(-200, -64, -200)
-    set {_max} to BlockVector3.at(200, 319, 200)
-    set {_region} to new CuboidRegion({_faweWorld}, {_min}, {_max})
-
-    # EditSession の作成 (制限なし)
-    set {_editSession} to WorldEdit.getInstance().newEditSessionBuilder().world({_faweWorld}).limitUnlimited().build()
-
-    # air で塗りつぶし
-    {_editSession}.setBlocks({_region}, BlockTypes.AIR.getDefaultState())
-    {_editSession}.close()
-# ========================================
-# TestB: スケマティックを貼り付ける
-# function TestB():
-    # wait 5 tick
-#     paste schematic named "%{selected_map::1}%" at location(0,100,0):
-#         paste entities: true
-#         paste biomes: true
-#         ignore air: true
-# ========================================
-function TestB():
-    wait 5 tick
-    set {_name} to "%{selected_map::1}%"
-
-    # スケマティックファイルの読み込み (.schem / .schematic 自動判別)
-    set {_file} to new File("plugins/FastAsyncWorldEdit/schematics/%{_name}%.schem")
-    if {_file}.exists() is false:
-        set {_file} to new File("plugins/FastAsyncWorldEdit/schematics/%{_name}%.schematic")
-    if {_file}.exists() is false:
-        broadcast "[TestB] スケマティックが見つかりません: %{_name}%"
-        stop
-
+    com.sk89q.worldedit.function.operation.Operations
+    com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats
+function ClearMap():
+    set {_max} to BlockVector3.at(300, 319, 300)
+    set {_min} to BlockVector3.at(-300, -64, -300)
+    set {_weWorld} to BukkitAdapter.adapt(world("world"))
+    set {_region} to new CuboidRegion({_weWorld}, {_min}, {_max})
+    set {_air} to BlockTypes.AIR.getDefaultState()
+    create section stored in {_task}:
+        set {_builder} to WorldEdit.getInstance().newEditSessionBuilder()
+        set {_builder} to {_builder}.world({_weWorld})
+        set {_builder} to {_builder}.limitUnlimited()
+        set {_builder} to {_builder}.fastMode(true)
+        set {_builder} to {_builder}.changeSetNull()
+        set {_builder} to {_builder}.checkMemory(false)
+        set {_session} to {_builder}.build()
+        {_session}.setBlocks({_region}, {_air})
+        {_session}.close()
+    run section {_task} async
+function LoadMap():
+    wait a tick
+    # Specify the schematic by file path
+    set {_file} to new File("plugins/FastAsyncWorldEdit/schematics/%{selected_map::1}%.schem")
     set {_format} to ClipboardFormats.findByFile({_file})
-    if {_format} is not set:
-        broadcast "[TestB] 対応フォーマットが見つかりません: %{_name}%"
-        stop
-
-    # クリップボードへ読み込み
     set {_fis} to new FileInputStream({_file})
     set {_reader} to {_format}.getReader({_fis})
     set {_clipboard} to {_reader}.read()
     {_reader}.close()
+    {_fis}.close()
+    # Align the center
+    set {_cbRegion} to {_clipboard}.getRegion()
+    set {_center} to {_cbRegion}.getCenter().toBlockPoint()
+    set {_origin} to {_clipboard}.getOrigin()
+    set {_centerOffset} to {_center}.subtract({_origin})
+    set {_targetVec} to BlockVector3.at(0, 100, 0)
+    set {_to} to {_targetVec}.subtract({_centerOffset})
+    set {_weWorld} to BukkitAdapter.adapt(world("world"))
+    # Paste asynchronously
+    create section stored in {_task}:
+        set {_builder} to WorldEdit.getInstance().newEditSessionBuilder()
+        set {_builder} to {_builder}.world({_weWorld})
+        set {_builder} to {_builder}.limitUnlimited()
+        set {_builder} to {_builder}.fastMode(true)
+        set {_builder} to {_builder}.changeSetNull()
+        set {_builder} to {_builder}.checkMemory(false)
+        set {_session} to {_builder}.build()
+        set {_holder} to new ClipboardHolder({_clipboard})
+        set {_pb} to {_holder}.createPaste({_session})
+        set {_pb} to {_pb}.to({_to})
+        set {_pb} to {_pb}.ignoreAirBlocks(true)
+        set {_pb} to {_pb}.copyEntities(true)
+        set {_pb} to {_pb}.copyBiomes(true)
+        set {_op} to {_pb}.build()
+        Operations.complete({_op})
+        {_session}.close()
+    run section {_task} async
+```
 
-    # 貼り付け先ワールドと座標
-    set {_faweWorld} to FaweAPI.getWorld("world")
-    set {_to} to BlockVector3.at(0, 100, 0)
 
-    # EditSession の作成
-    set {_editSession} to WorldEdit.getInstance().newEditSessionBuilder().world({_faweWorld}).limitUnlimited().build()
 
-    # ペースト操作の組み立て
-    set {_holder} to new ClipboardHolder({_clipboard})
-    set {_op} to {_holder}.createPaste({_editSession}).to({_to}).ignoreAirBlocks(true).copyEntities(true).copyBiomes(true).build()
 
-    Operations.complete({_op})
-    {_editSession}.close() -->
+
+
+
+
+
+
+
