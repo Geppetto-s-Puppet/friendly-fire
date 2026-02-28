@@ -1,0 +1,70 @@
+# # 特殊アクション
+# on sneak toggle:
+#     player is on ground
+#     player is sprinting
+#     player isn't sneaking
+#     player's gamemode isn't spectator
+#     player doesn't have potion effect oozing
+#     player doesn't have potion effect weakness
+#     set {_p} to vector in horizontal direction of player
+#     loop 18 times:
+#         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#         wait 1 tick
+#         while size of {停止::*} > 0:
+#             wait a tick
+#         if any:
+#             {game} isn't set
+#             player isn't sneaking
+#             player isn't on ground
+#             gamemode of player is spectator
+#         then:
+#             stop loop
+#         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#         apply potion of oozing tier 255 without particles whilst hiding icon to player for 0.5 seconds replacing existing effect
+#         execute console command "/playsound minecraft:block.cave_vines.pick_berries master @a %Loc(player)% 0.3 0.8"
+#         make 1 of block particle using (type of block under player) at player
+#         push player {_p} * 0.8 / loop-counter
+#         player.setRiptiding(true)
+#     player.setRiptiding(false)
+# on sneak toggle:
+#     player is on ground
+#     player isn't sneaking
+#     player isn't sprinting
+#     player's gamemode isn't spectator
+#     player doesn't have potion effect oozing
+#     player doesn't have potion effect weakness
+#     set {_p} to vector in horizontal direction of player
+#     loop living entities in radius 2.3 around player sorted by distance from player:
+#         set {_e} to vector in horizontal direction of loop-entity
+#         set {_d} to vector between player and loop-entity
+#         gamemode of loop-entity isn't spectator
+#         loop-entity isn't player
+#         {_p} dot {_e} > 0
+#         {_p} dot {_d} > 0
+#         set {_a} to loop-entity
+#         stop loop
+#     {_a} is an entity
+#     loop 600 times:
+#         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#         wait 1 tick
+#         while size of {停止::*} > 0:
+#             wait a tick
+#         if any:
+#             {_a} is dead
+#             {game} isn't set
+#             gamemode of {_a} is spectator
+#             gamemode of player is spectator
+#             distance between player and {_a} is more than 2.3
+#         then:
+#             stop loop
+#         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#         apply potion of weakness tier 255 without particles whilst hiding icon to player for 1 seconds replacing existing effect
+#         apply potion of weakness tier 255 without particles whilst hiding icon to {_a} for 1 seconds replacing existing effect
+#         execute console command "/playsound minecraft:item.lead.tied master @a %Loc(player)% 0.6 1.3" if loop-counter is 1
+#         execute console command "/particle crit %Loc({_a},1)% 0 0 0 0.3 1 force @a"
+#         teleport {_a} at location 0.7 meter horizontal in front of player
+#         if player isn't sneaking:
+#             execute console command "/playsound minecraft:entity.witch.throw master @a %Loc(player)% 0.4 0.8"
+#             remove weakness from player
+#             knockback {_a} forwards
+#             stop

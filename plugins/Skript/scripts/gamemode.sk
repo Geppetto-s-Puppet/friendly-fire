@@ -45,10 +45,10 @@ command /s <number=0> <string="DM">:
             loop players:
                 Reset(loop-player)
                 teleport loop-player at location(0,100,0,"world")
-            execute console command "/effect give @a minecraft:blindness 1 255 true"
+            execute console command "/effect give @a minecraft:blindness 5 255 true"
             send title {winner} with subtitle "&7チームが勝利しました" to players for 4 second
             play sound "MUSIC_CREATIVE" with seed 20 with volume 0.3 with pitch 2 for players
-            clear {♠::*}, {♥::*}, {♦::*}, {♣::*}, {🃏::*}
+            clear {selected_map::*}, {♠::*}, {♥::*}, {♦::*}, {♣::*}, {🃏::*}
             # マップのお片付け
             ClearMap()
         else if arg-1 is 1: 
@@ -64,8 +64,12 @@ command /s <number=0> <string="DM">:
             execute console command "/bossbar add timer ""------------------------"""
             ShuffleMap()
             LoadMap()
-            add all items to {_items::*}
-            # set {_test} to true if size of players is 1
+            loop all items:
+                if loop-item is edible:
+                    add loop-item to {_food::*}
+                else:
+                    add loop-item to {_misc::*}
+            set {_test} to true if size of players is 1
             send coloured "<#cd853f> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" to players
             send coloured "<#cd853f>" to players
             send coloured "<#cd853f>  &7マップ： &f%{selected_map::3}% &8(%{selected_map::2}%)" to players
@@ -104,12 +108,12 @@ command /s <number=0> <string="DM">:
                     send subtitle "&8&o違うマークの陣営を全滅させましょう" to loop-player for 4 second
                     set slot 0 of loop-player's inventory to ({_skill})
                     set slot 1 of loop-player's inventory to (1 of bow or crossbow)
-#                     set slot 2 of loop-player's inventory to (random integer between 20 and 30 of (random element out of {food::*}))
+                    set slot 2 of loop-player's inventory to (random integer between 16 and 32 of (random element out of {_food::*}))
                     set slot 3 of loop-player's inventory to (1 of potion of strong instant health)
                     set slot 4 of loop-player's inventory to (1 of potion of strong instant health)
-                    set slot 5 of loop-player's inventory to (random integer between 1 and 10 of (random element out of {_items::*}))
-                    set slot 6 of loop-player's inventory to (random integer between 1 and 10 of (random element out of {_items::*}))
-                    set slot 7 of loop-player's inventory to (random integer between 20 and 30 of arrow)
+                    set slot 5 of loop-player's inventory to (random integer between 1 and 16 of (random element out of {_misc::*}))
+                    set slot 6 of loop-player's inventory to (random integer between 1 and 16 of (random element out of {_misc::*}))
+                    set slot 7 of loop-player's inventory to (random integer between 24 and 48 of arrow)
                     set slot 8 of loop-player's inventory to {_card}
                     execute console command "/team join player %loop-player%"
                     add loop-player to {♠::*} if {_card}'s name contains "♠"
@@ -140,11 +144,12 @@ command /s <number=0> <string="DM">:
                 execute console command "/effect give @a minecraft:darkness 5 255 true"
                 execute console command "/effect give @a blindness 5 255 true"
                 execute console command "/effect give @a slowness 1 255 true"
-                execute console command "/spreadplayers 0 0 10 200 false @a"
                 execute console command "/playsound minecraft:event.mob_effect.trial_omen master @a ~ ~ ~ 0.6 0 0.6"
                 execute console command "/playsound minecraft:event.mob_effect.raid_omen master @a ~ ~ ~ 0.2 0 0.2"
                 execute console command "/bossbar set timer name ""&f&l%{selected_map::3}% &8&m &8&o Deathmatch"""
                 execute console command "/bossbar set timer style notched_20"
+                wait a tick
+                execute console command "/spreadplayers 0 0 10 200 false @a"
                 loop 12001 times:
                     wait a tick
                     stop if {game} isn't set

@@ -1,0 +1,87 @@
+
+# 管理者メニュー
+function Menu(p:player,n:integer=1):
+    set {_ui} to chest inventory with 6 row named "管理者メニュー (%{_n}%/%ceil(size of {skill::*}/36)%)"
+    execute console command "/playsound minecraft:item.book.page_turn master %{_p}% ~ ~ ~ 0.3 1.6 0.3"
+    loop 9 times:
+        set slot (loop-number +44) of {_ui} to iron bars named "&0" without entire tooltip
+        set slot (loop-number -1) of {_ui} to iron bars named "&0" without entire tooltip
+    loop 36 times:
+        set slot (loop-number +8) of {_ui} to {skill::%loop-number + ({_n} -1)*36%}
+    set slot 45 of {_ui} to soul lantern named "&rプレイヤーとして参加"
+    set slot 50 of {_ui} to command block minecart named "&rゲームを再読込"
+    set slot 48 of {_ui} to sculk sensor named "&rチートを有効化" if {game_cheat} is not true
+    set slot 45 of {_ui} to lantern named "&rプレイヤーから離脱" if Has({play::*}, {_p}) is true
+    set slot 48 of {_ui} to calibrated sculk sensor named "&rチートを無効化" if {game_cheat} is true
+    set slot 46 of {_ui} to music disc stal named "&rノーマルモードへ変更" if {game_suddendeath} is true
+    set slot 46 of {_ui} to music disc chirp named "&rサドンデスモードへ変更" if {game_suddendeath} isn't set
+    set slot 46 of {_ui} to music disc 11 named "&rサドンデスモードに固定" without entire tooltip if {game_suddendeath} is false
+    set slot 7 of {_ui} to (size of {map::*} +1) of filled map named "&rマップをランダム選択" with nbt from "{""components"":{""minecraft:map_color"":%random integer between 0 and 16777215%,""minecraft:max_stack_size"":99}}"
+    set slot 49 of {_ui} to player head named "&rゲームを終了" with nbt from "{""minecraft:profile"":{id:[I;276560226,289299024,-1648091673,1766957495],name:"""",properties:[{name:""textures"",value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzlhYTMyYWI3NTY2MDIzYTZkMmU2MjdiNDg4OTRlZGU5NWU2ZjYyYjhlMWI1NDQ1NzMwNGUwYmQxMTFiMTZmZCJ9fX0=""}]}}" if {game} is set
+    set slot 49 of {_ui} to player head named "&rゲームを開始" with nbt from "{""minecraft:profile"":{id:[I;1846823252,1344232203,-2116385834,1342708963],name:"""",properties:[{name:""textures"",value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjkzYTIwZGI5ZjFmMDA4MzhjMWRlNjhhZWI5NjA1YzAyZjcxYTU2OTg4ODA5YzVjMDE4MTdjZGJjZGUwYjZiMSJ9fX0=""}]}}" if {game} isn't set
+    set slot 52 of {_ui} to arrow named "&0" without entire tooltip
+    set slot 53 of {_ui} to arrow named "&0" without entire tooltip
+    set slot 52 of {_ui} to spectral arrow named "&r前のページ" if {_n} > 1
+    set slot 53 of {_ui} to spectral arrow named "&r次のページ" if {_n} < ceil(size of {skill::*}/36)
+    open {_ui} to {_p}
+on inventory close:
+    stop if Has({play::*}, player) is true
+    name of player's current inventory start with "管理者メニュー"
+    # wait a tick
+    # stop if Has({play::*}, player) is true
+    # name of player's current inventory doesn't start with "管理者メニュー"
+    set gamemode of player to spectator
+on inventory click:
+    name of player's inventory start with "管理者メニュー"
+    event.getRawSlot() is between 0 and 53
+    cancel event
+    execute console command "/playsound minecraft:block.tripwire.click_off master %player% ~ ~ ~ 0.3 1.6 0.3"
+    set {_n::*} to player's inventory's name parsed as "管理者メニュー \(%integer%/%integer%\)"
+    if item is spectral arrow:
+        Menu(player,{_n::1} -1) if clicked slot is 52
+        Menu(player,{_n::1} +1) if clicked slot is 53
+    else if clicked slot is 50:
+        close player's inventory
+        execute player command "/r"
+    else if clicked slot is 49:
+        close player's inventory
+        execute player command "/s"
+    else if clicked slot is 48:
+        if {game_cheat} is set:
+            clear {game_cheat}
+        else:
+            set {game_cheat} to true
+            loop players:
+                set cooldown of enchanted book for loop-player to 0 tick
+        Menu(player,{_n::1})
+    else if clicked slot is 46:
+        if {game_suddendeath} isn't set:
+            set {game_suddendeath} to true
+        else if {game_suddendeath} is true:
+            clear {game_suddendeath}
+        Menu(player,{_n::1})
+#         loop 40 times:
+#             wait a tick
+#             stop if {game} isn't set
+#             stop if {game_suddendeath} isn't true
+#         set {game_suddendeath} to false
+#         execute console command "/playsound minecraft:entity.elder_guardian.death master @a ~ ~ ~ 0.3 0 0.3"
+#         send title "&4サドンデスモード" with subtitle "&8生存者全員が瀕死になります" to all players
+#         execute console command "/effect give @a blindness 1 1 true"
+#         set max health of all players to 1
+#         set health of all players to 1
+#         loop players:
+#             close loop-player's inventory
+#             apply glowing 1 without any particles without a potion icon to loop-player for 999 days        
+    else if clicked slot is 45:
+        close player's inventory
+        if Has({play::*}, player) is true:
+            Reset(player)
+        else:
+            close player's inventory
+            Reset(player,"play")
+    else if clicked slot is 7:
+        ShuffleMap(true)
+        Menu(player,{_n::1})
+    else if clicked slot is between 9 and 45:
+        give item to player if item isn't structure void

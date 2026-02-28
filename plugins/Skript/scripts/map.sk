@@ -47,7 +47,6 @@ function ClearMap():
         {_session}.close()
     run section {_task} async
 function LoadMap():
-    wait a tick
     # schematicをパス指定
     set {_file} to new File("plugins/FastAsyncWorldEdit/schematics/%{selected_map::1}%.schem")
     set {_format} to ClipboardFormats.findByFile({_file})

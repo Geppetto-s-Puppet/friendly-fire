@@ -112,3 +112,29 @@ function Resets():
             clear loop-entity's inventory
         else:
             delete loop-entity
+
+function Ready(p:player,s:timespan,t:string="OFF") :: boolean:
+    if {_t} is "RESET":
+        if {game_cheat} is true:
+            set the cooldown of enchanted book for {_p} to 2 second if {_s} > 2 second
+        else:
+            set the cooldown of enchanted book for {_p} to {_s}
+        return true
+    else:
+        if any:
+            cooldown of enchanted book for {_p} > 0 tick
+            {_p}'s gamemode is spectator
+            {game} isn't set
+        then:
+            return false
+        Ready({_p},{_s},"RESET") is true
+        make {_p} swing their main hand
+        return true
+
+# function Own(e:entity,s:string,t:string="MAINHAND") :: boolean:
+#     if {_t} is "MAINHAND":
+#         return true if {_s} is string tag "skill" of custom nbt of {_e}'s tool
+#     else if {_t} is "INVENTORY":
+#         loop items in {_e}'s inventory:
+#             return true if {_s} is string tag "skill" of custom nbt of loop-item
+#     return false

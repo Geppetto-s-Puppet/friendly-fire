@@ -34,11 +34,6 @@
 | skript-reflect | 2.6.3 |
 | FastAsyncWorldEdit | 2.15.0 |
 
-<!-- | Minecraft | 1.21.x |
-| ProtocolLib | 5.4.0 |
-| skript-packet | latest |
-| PlaceholderAPI | 2.11.7 | -->
-
 ### Migration
 Replaced the built-in Skript-WorldEdit integration with direct Java API calls instead of:
 ```java
